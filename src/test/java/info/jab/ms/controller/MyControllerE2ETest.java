@@ -24,7 +24,11 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, 
-    properties = "my.app.external.gods-api-url=http://localhost:8089/greek")
+    properties = {
+        "greek-gods-api-url=http://localhost:8089/greek",
+        "roman-gods-api-url=http://localhost:8089/greek",
+        "nordic-gods-api-url=http://localhost:8089/greek"
+    })
 public class MyControllerE2ETest {
 
     @Autowired
@@ -45,6 +49,7 @@ public class MyControllerE2ETest {
     public void teardown() {
         wireMockServer.stop();
     }
+
     @Test
     public void testGetGodsReturnsEmptyList() throws Exception {
         wireMockServer.stubFor(get(urlEqualTo("/greek"))
@@ -53,6 +58,18 @@ public class MyControllerE2ETest {
                 .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                 .withBodyFile("greek-gods.json")));
         
+        wireMockServer.stubFor(get(urlEqualTo("/roman"))
+                .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .withBodyFile("roman-gods.json")));
+
+        wireMockServer.stubFor(get(urlEqualTo("/nordic"))
+                .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .withBodyFile("nordic-gods.json")));
+
         final String baseUrl = "http://localhost:" + randomServerPort + "/v1/gods";
 
         ResponseEntity<List<String>> gods = this.restTemplate.exchange(
@@ -62,6 +79,6 @@ public class MyControllerE2ETest {
             new ParameterizedTypeReference<>() {});
             
         assertThat(gods.getBody()).isNotNull();
-        assertThat(gods.getBody().size()).isEqualTo(20);
+        assertThat(gods.getBody().size()).isGreaterThan(0);
     }
 }

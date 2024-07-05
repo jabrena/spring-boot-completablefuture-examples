@@ -3,6 +3,7 @@
 ## How to build in local
 
 ```bash
+sdk env install
 ./mvnw clean spring-boot:run
 ./mvnw clean verify
 ./mvnw clean test -Dtest=MyControllerE2ETest

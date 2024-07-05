@@ -4,6 +4,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,22 +31,19 @@ public class MyController {
 
     @GetMapping("/v1/gods")
     public List<String> getGods() {
-        return List.of(
-                greekAddress, 
-                romanAddress, 
-                nordicAddress).stream()
-            .flatMap(str -> fetchGods(str).stream())
+        return List.of(greekAddress, romanAddress, nordicAddress).stream()
+            .flatMap(fetchGods)
             .toList();
     }
 
-    private List<String> fetchGods(String address) {
+    Function<String, Stream<String>> fetchGods = (address) -> {
         ResponseEntity<List<String>> gods = restClient
                 .get()
                 .uri(address)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .toEntity(new ParameterizedTypeReference<>() {});
-        return gods.getBody();
-    }
+        return gods.getBody().stream();
+    };
     
 }

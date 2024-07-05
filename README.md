@@ -3,9 +3,10 @@
 ## How to build in local
 
 ```bash
+./mvnw clean spring-boot:run
 ./mvnw clean verify
+./mvnw clean test -Dtest=MyControllerE2ETest
 ```
-
 
 ## Spring Boot CLI
 

@@ -13,10 +13,10 @@ sdk env install
 jwebserver -p 9000 -d "$(pwd)/target/site/"
 ```
 
-## Results
+## Results
 
 ```bash
-should_work_sequential_execution	1.643 s
+should_work_sequential_execution    1.643 s
 should_work_executor	            0.050 s
 should_work_completable	            0.032 s
 should_work_gatherers	            0.065 s

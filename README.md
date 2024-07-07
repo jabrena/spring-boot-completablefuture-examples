@@ -6,7 +6,7 @@
 sdk env install
 ./mvnw clean spring-boot:run
 ./mvnw clean verify
-./mvnw clean test -Dtest=MyControllerE2ETest
+./mvnw clean test -Dtest=AsyncControllerE2ETest
 
 //Surefire report
 ./mvnw clean test -Dtest=MyControllerE2ETest surefire-report:report

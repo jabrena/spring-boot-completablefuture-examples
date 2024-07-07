@@ -3,6 +3,8 @@ package info.jab.ms.controller;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClient;
 
+import info.jab.ms.config.ProfileService;
+
 import java.util.List;
 
 import java.util.concurrent.Callable;

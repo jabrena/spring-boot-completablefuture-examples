@@ -1,4 +1,4 @@
-package info.jab.ms.controller;
+package info.jab.ms.config;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

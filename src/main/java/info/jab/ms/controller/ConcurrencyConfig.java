@@ -21,7 +21,6 @@ public class ConcurrencyConfig {
     
 
     @Bean
-    //@ConditionalOnProperty(name = "spring.profiles.active", havingValue = "!vt") // Not "vt" profile
     public ExecutorService executorPT() {
         int cores = Runtime.getRuntime().availableProcessors();
         return Executors.newFixedThreadPool(cores);

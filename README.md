@@ -12,17 +12,26 @@ sdk env install
 ./mvnw clean test -Dtest=MyControllerE2ETest surefire-report:report
 ./mvnw clean test -Dtest=MyControllerE2ETest -Dspring.profiles.active=vt surefire-report:report 
 jwebserver -p 9000 -d "$(pwd)/target/site/"
+sudo lsof -i :9000
 ```
 
 ## Results
 
+**With platform threads:**
+
 ```bash
-should_work_sequential_execution    1.643 s
-should_work_executor	            0.050 s
+should_work_sequential_execution    1.775 s
+should_work_executor	            0.036 s
 should_work_completable	            0.032 s
-should_work_gatherers	            0.065 s
-should_work_structural	            0.031 s
-should_work_structural_multiple	    0.023 s
+should_work_gatherers	            0.028 s
+should_work_structural	            0.033 s
+should_work_structural_multiple	    0.026 s
+```
+
+**With virutal threads:**
+
+```bash
+PENDING
 ```
 
 ## Spring Boot CLI

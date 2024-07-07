@@ -7,7 +7,6 @@ import java.util.List;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -17,6 +16,7 @@ import java.util.stream.Gatherers;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.StructuredTaskScope;
 import java.util.concurrent.StructuredTaskScope.Subtask;
+import java.util.concurrent.ThreadFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +44,12 @@ public class MyController {
     @Autowired
     private RestClient restClient;
 
+    @Autowired
+    private ExecutorService executor;
+
+    @Autowired
+    private ProfileService profileService;
+
     Function<String, Stream<String>> fetchGods = (address) -> {
         logger.info(Thread.currentThread().getName());
         ResponseEntity<List<String>> gods = restClient
@@ -54,8 +60,6 @@ public class MyController {
                 .toEntity(new ParameterizedTypeReference<>() {});
         return gods.getBody().stream();
     };
-
-    private static final ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
 
     Function<String, Future<Stream<String>>> asyncCall = (param) -> {
         Callable<Stream<String>> task = () -> fetchGods.apply(param);
@@ -68,8 +72,9 @@ public class MyController {
         return cf1;
     };
 
-    Function<String, Stream<String>> fetchGodsStructured = param -> {
-        try (var scope = new StructuredTaskScope<Stream<String>>()) {
+    Function<String, Stream<String>> fetchGodsStructuredPT = param -> {
+        ThreadFactory threadFactory = Thread.ofPlatform().factory();
+        try (var scope = new StructuredTaskScope<Stream<String>>("jab-pt", threadFactory)) {
             var subtask1 = scope.fork(() -> fetchGods.apply(param));
             scope.join();
             return subtask1.get();
@@ -79,8 +84,38 @@ public class MyController {
         }
     };
 
-    Function<List<String>, List<String>> fetchGodsStructured2 = param -> {
-        try (var scope = new StructuredTaskScope<>()) {
+    Function<String, Stream<String>> fetchGodsStructuredVT = param -> {
+        ThreadFactory threadFactory = Thread.ofVirtual().factory();
+        try (var scope = new StructuredTaskScope<Stream<String>>("jab-vt", threadFactory)) {
+            var subtask1 = scope.fork(() -> fetchGods.apply(param));
+            scope.join();
+            return subtask1.get();
+        } catch (InterruptedException ex) {
+            logger.warn(ex.getLocalizedMessage(), ex);
+            throw new CancellationException(ex.getMessage());
+        }
+    };
+
+    Function<List<String>, List<String>> fetchGodsStructured2VT = param -> {
+        ThreadFactory threadFactory = Thread.ofVirtual().factory();
+        try (var scope = new StructuredTaskScope<>("jab-vt", threadFactory)) {
+            List<Subtask<Stream<String>>> subtaskList = param.stream()
+                .map(sup -> {
+                    Subtask<Stream<String>> subTask = scope.fork(() -> fetchGods.apply(sup));
+                    return subTask;
+                })
+                .toList();
+            scope.join();
+            return subtaskList.stream().flatMap(Subtask::get).toList();
+        } catch (InterruptedException ex) {
+            logger.warn(ex.getLocalizedMessage(), ex);
+            throw new CancellationException(ex.getMessage());
+        }
+    };
+
+    Function<List<String>, List<String>> fetchGodsStructured2PT = param -> {
+        ThreadFactory threadFactory = Thread.ofPlatform().factory();
+        try (var scope = new StructuredTaskScope<>("jab-pt", threadFactory)) {
             List<Subtask<Stream<String>>> subtaskList = param.stream()
                 .map(sup -> {
                     Subtask<Stream<String>> subTask = scope.fork(() -> fetchGods.apply(sup));
@@ -134,15 +169,23 @@ public class MyController {
 
     @GetMapping("/v1/gods-structural")
     public List<String> getGods5() {
+        var function = profileService.getActiveProfiles().contains("vt") 
+            ? fetchGodsStructuredVT 
+            : fetchGodsStructuredPT;
+
         return List.of(greekAddress, romanAddress, nordicAddress).stream()
-            .flatMap(fetchGodsStructured)
+            .flatMap(function)
             .toList();
     }
 
     @GetMapping("/v1/gods-structural-multiple")
     public List<String> getGods6() {
+        var function = profileService.getActiveProfiles().contains("vt") 
+            ? fetchGodsStructured2VT 
+            : fetchGodsStructured2PT;
+
         var list = List.of(greekAddress, romanAddress, nordicAddress);
-        return fetchGodsStructured2.apply(list);
+        return function.apply(list);
     }
     
 }

@@ -10,6 +10,7 @@ sdk env install
 
 //Surefire report
 ./mvnw clean test -Dtest=MyControllerE2ETest surefire-report:report
+./mvnw clean test -Dtest=MyControllerE2ETest -Dspring.profiles.active=vt surefire-report:report 
 jwebserver -p 9000 -d "$(pwd)/target/site/"
 ```
 

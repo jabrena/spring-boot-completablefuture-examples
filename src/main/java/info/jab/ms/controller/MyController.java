@@ -7,7 +7,6 @@ import java.util.List;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -44,6 +43,12 @@ public class MyController {
     @Autowired
     private RestClient restClient;
 
+    @Autowired
+    private ExecutorService executor;
+
+    @Autowired
+    private ProfileService profileService;
+
     Function<String, Stream<String>> fetchGods = (address) -> {
         logger.info(Thread.currentThread().getName());
         ResponseEntity<List<String>> gods = restClient
@@ -54,8 +59,6 @@ public class MyController {
                 .toEntity(new ParameterizedTypeReference<>() {});
         return gods.getBody().stream();
     };
-
-    private static final ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
 
     Function<String, Future<Stream<String>>> asyncCall = (param) -> {
         Callable<Stream<String>> task = () -> fetchGods.apply(param);

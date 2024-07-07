@@ -1,4 +1,4 @@
-package info.jab.ms.controller;
+package info.jab.ms.config;
 
 import java.util.Arrays;
 import java.util.List;

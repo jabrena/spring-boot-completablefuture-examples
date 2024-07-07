@@ -6,7 +6,7 @@
 sdk env install
 ./mvnw clean spring-boot:run
 ./mvnw clean verify
-./mvnw clean test -Dtest=AsyncControllerE2ETest
+./mvnw clean test -Dtest=KafkaControllerE2ETest
 
 //Surefire report
 ./mvnw clean test -Dtest=MyControllerE2ETest surefire-report:report
@@ -40,3 +40,9 @@ PENDING
 sdk install springboot
 spring init -d=web,devtools --build=maven --force ./
 ```
+
+## References
+
+- https://github.com/jabrena/latency-problems
+- https://hub.docker.com/r/confluentinc/cp-zookeeper/tags
+- https://hub.docker.com/r/confluentinc/cp-kafka

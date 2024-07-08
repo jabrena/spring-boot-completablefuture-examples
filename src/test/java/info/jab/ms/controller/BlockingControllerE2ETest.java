@@ -35,7 +35,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
         "roman-gods-api-url=http://localhost:8089/roman",
         "nordic-gods-api-url=http://localhost:8089/nordic"
     })
-public class MyControllerE2ETest {
+public class BlockingControllerE2ETest {
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -121,21 +121,6 @@ public class MyControllerE2ETest {
 
     @Test
     @Order(4)
-    public void should_work_gatherers() throws Exception {
-        final String baseUrl = "http://localhost:" + randomServerPort + "/v1/gods-gatherers";
-
-        ResponseEntity<List<String>> gods = this.restTemplate.exchange(
-            baseUrl,
-            HttpMethod.GET,
-            null,
-            new ParameterizedTypeReference<>() {});
-            
-        assertThat(gods.getBody()).isNotNull();
-        assertThat(gods.getBody().size()).isGreaterThan(0);
-    }
-
-    @Test
-    @Order(5)
     public void should_work_structural() throws Exception {
         final String baseUrl = "http://localhost:" + randomServerPort + "/v1/gods-structural";
 
@@ -150,9 +135,24 @@ public class MyControllerE2ETest {
     }
 
     @Test
-    @Order(6)
+    @Order(5)
     public void should_work_structural_multiple() throws Exception {
         final String baseUrl = "http://localhost:" + randomServerPort + "/v1/gods-structural-multiple";
+
+        ResponseEntity<List<String>> gods = this.restTemplate.exchange(
+            baseUrl,
+            HttpMethod.GET,
+            null,
+            new ParameterizedTypeReference<>() {});
+            
+        assertThat(gods.getBody()).isNotNull();
+        assertThat(gods.getBody().size()).isGreaterThan(0);
+    }
+
+    @Test
+    @Order(6)
+    public void should_work_gatherers() throws Exception {
+        final String baseUrl = "http://localhost:" + randomServerPort + "/v1/gods-gatherers";
 
         ResponseEntity<List<String>> gods = this.restTemplate.exchange(
             baseUrl,

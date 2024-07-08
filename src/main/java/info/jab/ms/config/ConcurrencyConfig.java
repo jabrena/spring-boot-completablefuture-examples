@@ -19,7 +19,6 @@ public class ConcurrencyConfig {
         return Executors.newVirtualThreadPerTaskExecutor();
     }
     
-
     @Bean
     public ExecutorService executorPT() {
         int cores = Runtime.getRuntime().availableProcessors();

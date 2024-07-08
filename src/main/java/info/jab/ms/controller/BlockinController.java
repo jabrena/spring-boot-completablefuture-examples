@@ -30,9 +30,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
-public class MyController {
+public class BlockinController {
 
-    private static final Logger logger = LoggerFactory.getLogger(MyController.class);
+    private static final Logger logger = LoggerFactory.getLogger(BlockinController.class);
 
     @Value("${greek-gods-api-url}")
     private String greekAddress;
@@ -161,16 +161,8 @@ public class MyController {
             .toList();
     }
 
-    @GetMapping("/v1/gods-gatherers")
-    public List<String> getGods4() {
-        return List.of(greekAddress, romanAddress, nordicAddress).stream()
-            .gather(Gatherers.mapConcurrent(8, str -> fetchGods.apply(str)))
-            .flatMap(Function.identity())
-            .toList();
-    }
-
     @GetMapping("/v1/gods-structural")
-    public List<String> getGods5() {
+    public List<String> getGods4() {
         var function = profileService.getActiveProfiles().contains("vt") 
             ? fetchGodsStructuredVT 
             : fetchGodsStructuredPT;
@@ -181,13 +173,21 @@ public class MyController {
     }
 
     @GetMapping("/v1/gods-structural-multiple")
-    public List<String> getGods6() {
+    public List<String> getGods5() {
         var function = profileService.getActiveProfiles().contains("vt") 
             ? fetchGodsStructured2VT 
             : fetchGodsStructured2PT;
 
         var list = List.of(greekAddress, romanAddress, nordicAddress);
         return function.apply(list);
+    }
+
+    @GetMapping("/v1/gods-gatherers")
+    public List<String> getGods6() {
+        return List.of(greekAddress, romanAddress, nordicAddress).stream()
+            .gather(Gatherers.mapConcurrent(8, str -> fetchGods.apply(str)))
+            .flatMap(Function.identity())
+            .toList();
     }
     
 }

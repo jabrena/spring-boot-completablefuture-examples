@@ -13,25 +13,23 @@ public class AsyncController {
 
     private static final Logger logger = LoggerFactory.getLogger(AsyncController.class);
 
-    @GetMapping("/v1/async")
-    public CompletableFuture<String> startAsyncTask() {
-        logger.info("Request received to start async task");
-        CompletableFuture<String> future = executeAsyncTask();
-        return future;
-    }
+    private final int seconds = 5;
 
     @Async
-    public CompletableFuture<String> executeAsyncTask() {
+    @GetMapping("/v1/async")
+    public CompletableFuture<String> startAsyncTask() {
         logger.info("Start executing async task");
         return CompletableFuture.supplyAsync(() -> {
-            try {
-                Thread.sleep(5000);  // Simulate a long-running task
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                logger.error("Task interrupted", e);
-            }
-            logger.info("Finished executing async task");
+            delay(seconds);
             return "Async task completed";
         });
+    }
+
+    private void delay(int seconds) {
+        try {
+            Thread.sleep(seconds * 1000);
+        } catch (InterruptedException ex) { 
+            //Empty on purpose
+        }
     }
 }

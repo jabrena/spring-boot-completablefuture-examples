@@ -4,9 +4,10 @@ package info.jab.ms.controller;
 import static org.awaitility.Awaitility.await;
 
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -22,41 +23,20 @@ public class AsyncControllerE2ETest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    @Test
-    public void should_work1() {
-        String url = "http://localhost:" + port + "/v1/async-result";
-         
-        await().atMost(10, TimeUnit.SECONDS).until(() -> {
-            ResponseEntity<String> asyncResponse = restTemplate.getForEntity(url, String.class);
-            return asyncResponse.getBody().contains("Async task completed");
-        });
+    static Stream<String> endpoints() {
+        return Stream.of(
+            "/v1/async-result",
+           // "/v1/async-future",     // Disabled test will not be included in the test data
+            "/v1/async-future2",
+            "/v1/async-cf"
+        );
     }
 
-    @Disabled
-    @Test
-    public void should_work2() {
-        String url = "http://localhost:" + port + "/v1/async-future";
-         
-        await().atMost(10, TimeUnit.SECONDS).until(() -> {
-            ResponseEntity<String> asyncResponse = restTemplate.getForEntity(url, String.class);
-            return asyncResponse.getBody().contains("Async task completed");
-        });
-    }
+    @ParameterizedTest
+    @MethodSource("endpoints")
+    public void shouldWork(String endpoint) {
+        String url = "http://localhost:" + port + endpoint;
 
-    @Test
-    public void should_work3() {
-        String url = "http://localhost:" + port + "/v1/async-future2";
-         
-        await().atMost(10, TimeUnit.SECONDS).until(() -> {
-            ResponseEntity<String> asyncResponse = restTemplate.getForEntity(url, String.class);
-            return asyncResponse.getBody().contains("Async task completed");
-        });
-    }
-
-    @Test
-    public void should_work4() {
-        String url = "http://localhost:" + port + "/v1/async-cf";
-         
         await().atMost(10, TimeUnit.SECONDS).until(() -> {
             ResponseEntity<String> asyncResponse = restTemplate.getForEntity(url, String.class);
             return asyncResponse.getBody().contains("Async task completed");

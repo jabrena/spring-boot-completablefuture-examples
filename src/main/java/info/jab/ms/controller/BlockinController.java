@@ -14,6 +14,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 import java.util.stream.Stream;
+import java.util.stream.Collectors;
 import java.util.stream.Gatherers;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.StructuredTaskScope;

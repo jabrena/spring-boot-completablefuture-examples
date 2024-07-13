@@ -6,15 +6,18 @@
 sdk env install
 ./mvnw clean spring-boot:run
 ./mvnw clean verify
-./mvnw clean test -Dtest=KafkaControllerE2ETest
+./mvnw clean test -Dtest=BlockingControllerE2ETest
 
 //Surefire report
 ./mvnw clean test -Dtest=BlockingControllerE2ETest surefire-report:report
 jwebserver -p 9000 -d "$(pwd)/target/site/"
 ./mvnw clean test -Dtest=BlockingControllerE2ETest -Dspring.profiles.active=vt surefire-report:report 
 jwebserver -p 9000 -d "$(pwd)/target/site/"
-sudo lsof -i :9000
+sudo lsof -i :8089
 
+curl -v -X GET http://localhost:32928/rest/gods/1.0/greek \
+-H "Content-Type: application/json" \
+-H "Accept: application/json"
 ```
 
 ## Results
@@ -90,5 +93,5 @@ spring init -d=web,devtools --build=maven --force ./
 ## References
 
 - https://github.com/jabrena/latency-problems
-- https://hub.docker.com/r/confluentinc/cp-zookeeper/tags
 - https://hub.docker.com/r/confluentinc/cp-kafka
+- https://editor-next.swagger.io/

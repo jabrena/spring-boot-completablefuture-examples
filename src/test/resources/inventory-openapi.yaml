@@ -1,0 +1,98 @@
+openapi: 3.0.2
+info:
+  title: gods
+  version: "1.0"
+  description: API definition of Gods used in Latency problems
+  license:
+    name: Apache 2.0
+    url: https://opensource.org/license/apache-2-0
+paths:
+  /greek:
+    get:
+      responses:
+        "200":
+          description: "Returns greek gods"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+              example:                
+                - "Zeus"
+                - "Hera"
+                - "Poseidon"
+                - "Demeter"
+                - "Ares"
+                - "Athena"
+                - "Apollo"
+                - "Artemis"
+                - "Hephaestus"
+                - "Aphrodite"
+                - "Hermes"
+                - "Dionysus"
+                - "Hades"
+                - "Hypnos"
+                - "Nike"
+                - "Janus"
+                - "Nemesis"
+                - "Iris"
+                - "Hecate"
+                - "Tyche"
+  /api/inventory/{code}:
+    get:
+      parameters:
+        - name: code
+          description: product code
+          schema:
+            type: string
+          in: path
+          required: true
+          examples:
+            P101:
+              value: P101
+            P102:
+              value: P102
+            P103:
+              value: P103
+      responses:
+        "200":
+          description: "valid"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+              examples:
+                P101:
+                  value:
+                    code: P101
+                    quantity: 25
+                P103:
+                  value:
+                    code: P103
+                    quantity: 0
+        "500":
+          description: "invalid"
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                P102:
+                  value: ""
+components:
+  schemas:
+    Product:
+      title: Root Type for Product
+      type: object
+      properties:
+        code:
+          description: Code of this product
+          type: string
+        quantity:
+          description: Remaining quantity for this product
+          type: number
+      required:
+        - code
+        - quantity
+      additionalProperties: false

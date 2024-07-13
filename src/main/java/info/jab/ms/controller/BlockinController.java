@@ -35,7 +35,7 @@ public class BlockinController {
 
     private static final Logger logger = LoggerFactory.getLogger(BlockinController.class);
 
-    @Value("${greek-gods-api-url}")
+    @Value("${greek-gods-api-url}/greek")
     private String greekAddress;
 
     @Value("${roman-gods-api-url}")
@@ -135,6 +135,14 @@ public class BlockinController {
 
     @GetMapping("/v1/gods-sequential")
     public List<String> getGods1() {
+        System.out.println(greekAddress);
+        
+        try {
+            Thread.sleep(1000 * 1000);
+        } catch (InterruptedException ex) { 
+            //Empty on purpose
+        }
+
         return List.of(greekAddress, romanAddress, nordicAddress).stream()
             .flatMap(fetchGods)
             .toList();

@@ -17,9 +17,9 @@ import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
 @TestConfiguration(proxyBeanMethods = false)
-public class ContainersConfig {
+public class KafkaContainerConfig {
     
-    private static final Logger logger = LoggerFactory.getLogger(ContainersConfig.class);
+    private static final Logger logger = LoggerFactory.getLogger(KafkaContainerConfig.class);
 
     //https://hub.docker.com/r/confluentinc/cp-kafka/tags
     private static final String kafkaVersion = "confluentinc/cp-kafka:7.5.5";

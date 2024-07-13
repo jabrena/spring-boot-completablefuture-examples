@@ -1,0 +1,90 @@
+openapi: 3.0.2
+info:
+  title: gods
+  version: "1.0"
+  description: API definition of Gods used in Latency problems
+  license:
+    name: Apache 2.0
+    url: https://opensource.org/license/apache-2-0
+paths:
+  /greek:
+    get:
+      responses:
+        "200":
+          description: "Returns greek gods"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+              examples:
+                example1:
+                  summary: Greek Gods
+                  value:
+                    - Zeus
+                    - Hera
+                    - Poseidon
+                    - Demeter
+                    - Ares
+                    - Athena
+                    - Apollo
+                    - Artemis
+                    - Hephaestus
+                    - Aphrodite
+                    - Hermes
+                    - Dionysus
+                    - Hades
+                    - Hypnos
+                    - Nike
+                    - Janus
+                    - Nemesis
+                    - Iris
+                    - Hecate
+                    - Tyche
+  /roman:
+    get:
+      responses:
+        "200":
+          description: "Returns roman gods"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+              examples:
+                example1:
+                  summary: Roman Gods
+                  value:
+                    - Venus
+                    - Mars
+                    - Neptun
+                    - Mercury
+                    - luto
+                    - Jupiter
+  /nordic:
+    get:
+      responses:
+        "200":
+          description: "Returns nordic gods"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+              examples:
+                example1:
+                  summary: Nordic Gods
+                  value:
+                    - Baldur
+                    - Freyja
+                    - Heimdall
+                    - Frigga
+                    - Hel
+                    - Loki
+                    - Njord
+                    - Odin
+                    - Thor
+                    - Tyr

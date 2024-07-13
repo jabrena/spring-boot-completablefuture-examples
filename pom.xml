@@ -52,12 +52,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.wiremock</groupId>
-			<artifactId>wiremock-standalone</artifactId>
-			<version>3.8.0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>io.github.microcks</groupId>
 			<artifactId>microcks-testcontainers</artifactId>
 			<version>0.2.8</version>

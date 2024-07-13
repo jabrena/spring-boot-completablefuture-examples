@@ -12,11 +12,10 @@ public class MicrocksContainerConfig {
     @Bean
     MicrocksContainer microcksContainer(DynamicPropertyRegistry registry) {
         MicrocksContainer microcks = new MicrocksContainer("quay.io/microcks/microcks-uber:1.9.1-native")
-                .withMainArtifacts("inventory-openapi.yaml")
+                .withMainArtifacts("gods-openapi.yaml")
                 .withAccessToHost(true);
 
-        registry.add(
-                "greek-gods-api-url", () -> microcks.getRestMockEndpoint("gods", "1.0"));
+        registry.add("gods-api-url", () -> microcks.getRestMockEndpoint("gods", "1.0"));
 
         return microcks;
     }

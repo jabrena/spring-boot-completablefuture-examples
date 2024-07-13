@@ -1,8 +1,5 @@
 package info.jab.ms.controller;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
@@ -25,17 +22,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-import com.github.tomakehurst.wiremock.WireMockServer;
-
 //@TestMethodOrder(MethodOrderer.MethodName.class)
 @TestMethodOrder(OrderAnnotation.class)
-@SpringBootTest(
-    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, 
-    properties = {
-        //"greek-gods-api-url=http://localhost:8089/greek",
-        "roman-gods-api-url=http://localhost:8089/roman",
-        "nordic-gods-api-url=http://localhost:8089/nordic"
-    })
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(MicrocksContainerConfig.class)
 public class BlockingControllerE2ETest {
 
@@ -44,37 +33,6 @@ public class BlockingControllerE2ETest {
 
     @LocalServerPort
     int randomServerPort;
-
-    WireMockServer wireMockServer;
-
-    @BeforeEach
-    public void setup() {
-        wireMockServer = new WireMockServer(8089);
-        wireMockServer.start();
-
-        wireMockServer.stubFor(get(urlEqualTo("/greek"))
-            .willReturn(aResponse()
-            .withStatus(200)
-            .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-            .withBodyFile("greek-gods.json")));
-
-        wireMockServer.stubFor(get(urlEqualTo("/roman"))
-            .willReturn(aResponse()
-            .withStatus(200)
-            .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-            .withBodyFile("roman-gods.json")));
-
-        wireMockServer.stubFor(get(urlEqualTo("/nordic"))
-            .willReturn(aResponse()
-            .withStatus(200)
-            .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-            .withBodyFile("nordic-gods.json")));
-    }
-
-    @AfterEach
-    public void teardown() {
-        wireMockServer.stop();
-    }
 
     @Test
     @Order(1)

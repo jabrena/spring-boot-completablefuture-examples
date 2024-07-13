@@ -14,10 +14,6 @@ jwebserver -p 9000 -d "$(pwd)/target/site/"
 ./mvnw clean test -Dtest=BlockingControllerE2ETest -Dspring.profiles.active=vt surefire-report:report 
 jwebserver -p 9000 -d "$(pwd)/target/site/"
 sudo lsof -i :8089
-
-curl -v -X GET http://localhost:32928/rest/gods/1.0/greek \
--H "Content-Type: application/json" \
--H "Accept: application/json"
 ```
 
 ## Results

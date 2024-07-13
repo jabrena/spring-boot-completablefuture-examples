@@ -11,6 +11,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 
 @RestController
 public class AsyncController {
@@ -65,6 +66,16 @@ public class AsyncController {
     public Future<String> asyncFuture2() {
         logger.info("Future from CompletableFuture Example");
         return asyncProcessCF();
+    }
+
+    //Not working
+    @GetMapping("/v1/async-future3")
+    public Future<String> asyncFuture3() {
+        logger.info("Future from FutureTask Example");
+        return new FutureTask<String>(() -> {
+            delay(seconds);
+            return asyncMessage;
+        });
     }
 
     @GetMapping("/v1/async-cf")

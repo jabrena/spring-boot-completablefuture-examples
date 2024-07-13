@@ -26,8 +26,9 @@ public class AsyncControllerE2ETest {
     static Stream<String> endpoints() {
         return Stream.of(
             "/v1/async-result",
-           // "/v1/async-future",     // Disabled test will not be included in the test data
+            // "/v1/async-future",
             "/v1/async-future2",
+            //"/v1/async-future3",
             "/v1/async-cf"
         );
     }

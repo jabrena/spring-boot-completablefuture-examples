@@ -76,7 +76,7 @@ public class BlockingControllerE2ETest {
 
     @Test
     @Order(1)
-    public void should_work_sequential_execution() throws Exception {
+    void should_work_sequential_execution() throws Exception {
         final String baseUrl = "http://localhost:" + randomServerPort + "/v1/gods-sequential";
 
         ResponseEntity<List<String>> gods = this.restTemplate.exchange(
@@ -91,7 +91,7 @@ public class BlockingControllerE2ETest {
 
     @Test
     @Order(2)
-    public void should_work_executor() throws Exception {
+    void should_work_executor() throws Exception {
         final String baseUrl = "http://localhost:" + randomServerPort + "/v1/gods-executor";
 
         ResponseEntity<List<String>> gods = this.restTemplate.exchange(
@@ -106,7 +106,7 @@ public class BlockingControllerE2ETest {
 
     @Test
     @Order(3)
-    public void should_work_completable() throws Exception {
+    void should_work_completable() throws Exception {
         final String baseUrl = "http://localhost:" + randomServerPort + "/v1/gods-completable";
 
         ResponseEntity<List<String>> gods = this.restTemplate.exchange(
@@ -121,7 +121,7 @@ public class BlockingControllerE2ETest {
 
     @Test
     @Order(4)
-    public void should_work_structural() throws Exception {
+    void should_work_structural() throws Exception {
         final String baseUrl = "http://localhost:" + randomServerPort + "/v1/gods-structural";
 
         ResponseEntity<List<String>> gods = this.restTemplate.exchange(
@@ -136,7 +136,7 @@ public class BlockingControllerE2ETest {
 
     @Test
     @Order(5)
-    public void should_work_structural_multiple() throws Exception {
+    void should_work_structural_multiple() throws Exception {
         final String baseUrl = "http://localhost:" + randomServerPort + "/v1/gods-structural-multiple";
 
         ResponseEntity<List<String>> gods = this.restTemplate.exchange(
@@ -151,7 +151,7 @@ public class BlockingControllerE2ETest {
 
     @Test
     @Order(6)
-    public void should_work_gatherers() throws Exception {
+    void should_work_gatherers() throws Exception {
         final String baseUrl = "http://localhost:" + randomServerPort + "/v1/gods-gatherers";
 
         ResponseEntity<List<String>> gods = this.restTemplate.exchange(

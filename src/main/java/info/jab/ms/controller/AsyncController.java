@@ -7,9 +7,12 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import info.jab.ms.util.CustomFuture;
+
+import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
@@ -77,6 +80,19 @@ public class AsyncController {
             return asyncMessage;
         });
     }
+
+    @GetMapping("/v1/async-future4")
+    public Future<String> asyncFuture4() {
+        logger.info("Future from CustomFuture Example");
+        Callable<String> task = () -> {
+            delay(seconds);
+            return asyncMessage;
+        };
+        return new CustomFuture<String>(task);
+    }
+
+
+
 
     @GetMapping("/v1/async-cf")
     public CompletableFuture<String> asyncCF() {

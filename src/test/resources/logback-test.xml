@@ -1,0 +1,18 @@
+<configuration>
+
+    <!-- Scan for changes in this file every 30 seconds -->
+    <springProfile name="default">
+        <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+        <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+        <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){black} %clr(%5p) %clr(%logger{36}){cyan} - %clr(%m%n){black}"/>
+
+        <logger name="org.testcontainers" level="INFO"/>
+        <logger name="com.github.dockerjava" level="WARN"/>
+
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+</configuration>

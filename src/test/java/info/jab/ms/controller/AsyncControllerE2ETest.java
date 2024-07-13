@@ -29,18 +29,23 @@ public class AsyncControllerE2ETest {
             // "/v1/async-future",
             "/v1/async-future2",
             //"/v1/async-future3",
+            //"/v1/async-future4",
             "/v1/async-cf"
         );
     }
 
     @ParameterizedTest
     @MethodSource("endpoints")
-    public void shouldWork(String endpoint) {
+    void shouldWork(String endpoint) {
+        //Given
         String url = "http://localhost:" + port + endpoint;
+        String expectedMessage = "Async task completed";
 
+        //When
+        //Then
         await().atMost(10, TimeUnit.SECONDS).until(() -> {
             ResponseEntity<String> asyncResponse = restTemplate.getForEntity(url, String.class);
-            return asyncResponse.getBody().contains("Async task completed");
+            return asyncResponse.getBody().contains(expectedMessage);
         });
     }
 }

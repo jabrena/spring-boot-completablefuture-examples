@@ -29,7 +29,6 @@ public class AsyncControllerE2ETest {
             // "/v1/async-future",
             "/v1/async-future2",
             //"/v1/async-future3",
-            //"/v1/async-future4",
             "/v1/async-cf"
         );
     }

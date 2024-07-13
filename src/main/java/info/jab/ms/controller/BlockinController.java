@@ -35,13 +35,13 @@ public class BlockinController {
 
     private static final Logger logger = LoggerFactory.getLogger(BlockinController.class);
 
-    @Value("${greek-gods-api-url}")
+    @Value("${gods-api-url}/greek")
     private String greekAddress;
 
-    @Value("${roman-gods-api-url}")
+    @Value("${gods-api-url}/roman")
     private String romanAddress;
 
-    @Value("${nordic-gods-api-url}")
+    @Value("${gods-api-url}/nordic")
     private String nordicAddress;
 
     @Autowired

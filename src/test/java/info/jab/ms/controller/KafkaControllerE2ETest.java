@@ -18,7 +18,7 @@ import info.jab.ms.controller.KafkaController.MyRequest;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Import(ContainersConfig.class)
+@Import(KafkaContainerConfig.class)
 public class KafkaControllerE2ETest {
 
     @LocalServerPort

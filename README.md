@@ -6,7 +6,7 @@
 sdk env install
 ./mvnw clean spring-boot:run
 ./mvnw clean verify
-./mvnw clean test -Dtest=BlockingControllerE2ETest
+./mvnw clean test -Dtest=KafkaControllerE2ETest
 
 //Surefire report
 ./mvnw clean test -Dtest=BlockingControllerE2ETest surefire-report:report

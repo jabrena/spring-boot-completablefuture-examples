@@ -21,8 +21,8 @@ import info.jab.ms.controller.KafkaController.MyRequest;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Import(KafkaContainerConfig.class)
-//@ContextConfiguration(initializers = {KafkaContainerInitializer.class})
+//@Import(KafkaContainerConfig.class)
+@ContextConfiguration(initializers = {KafkaContainerInitializer.class})
 public class KafkaControllerE2ETest {
 
     private static final Logger logger = LoggerFactory.getLogger(KafkaControllerE2ETest.class);
@@ -47,9 +47,6 @@ public class KafkaControllerE2ETest {
 
         // Then
         assertThat(result.getBody().message()).isEqualTo(expectedMessage);
-
-        //logger.info("Artificial pause");
-        //Thread.sleep(60000);
     }
 }
 

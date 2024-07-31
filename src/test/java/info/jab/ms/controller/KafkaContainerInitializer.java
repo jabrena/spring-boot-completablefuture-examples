@@ -13,7 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.testcontainers.containers.KafkaContainer;
+//import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.kafka.KafkaContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.utility.DockerImageName;
 
@@ -25,25 +26,23 @@ public class KafkaContainerInitializer implements ApplicationContextInitializer<
 
     //https://hub.docker.com/r/confluentinc/cp-kafka/tags
     //https://hub.docker.com/r/apache/kafka-native/tags
-    private static final String kafkaVersion = "confluentinc/cp-kafka:7.7.0";
-    //private static final String kafkaVersion = "apache/kafka-native:3.8.0";
+    //private static final String kafkaVersion = "confluentinc/cp-kafka:7.7.0";
+    private static final String kafkaVersion = "apache/kafka-native:3.8.0";
 
     private static final DockerImageName myImage = DockerImageName.parse(kafkaVersion)
-        .asCompatibleSubstituteFor("confluentinc/cp-kafka");
+        .asCompatibleSubstituteFor("apache/kafka");
 
     private static Slf4jLogConsumer logConsumer = new Slf4jLogConsumer(logger);
-    private static final KafkaContainer kafkaContainer = 
-        new KafkaContainer(myImage).withLogConsumer(logConsumer);
+    private static final KafkaContainer kafkaContainer = new KafkaContainer(myImage).withLogConsumer(logConsumer);
 
     static {
         kafkaContainer.start();
     }
 
+    @Override
     public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-        TestPropertyValues.of("spring.kafka.bootstrap-servers", kafkaContainer.getBootstrapServers())
-                .applyTo(configurableApplicationContext.getEnvironment());
-
-        //createTopic(topicName);
+        System.setProperty("spring.kafka.bootstrap-servers", kafkaContainer.getBootstrapServers());
+        createTopic(topicName);
     }
 
     private static Slf4jLogConsumer getLogConsumer(String containerName) {
@@ -60,6 +59,7 @@ public class KafkaContainerInitializer implements ApplicationContextInitializer<
         try (AdminClient adminClient = AdminClient.create(properties)) {
             NewTopic newTopic = new NewTopic(topicName, 1, (short) 1);
             adminClient.createTopics(Collections.singleton(newTopic)).all().get();
+            logger.info("Topic created: {}", topicName);
         } catch (InterruptedException | ExecutionException ex) {
             throw new RuntimeException(ex.getMessage(), ex);
         }

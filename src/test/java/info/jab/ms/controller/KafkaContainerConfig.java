@@ -9,7 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
-import org.testcontainers.containers.KafkaContainer;
+//import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.kafka.KafkaContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.utility.DockerImageName;
 
@@ -30,10 +31,10 @@ public class KafkaContainerConfig {
     private static Slf4jLogConsumer logConsumer = new Slf4jLogConsumer(logger);
 
     @Bean
-    @ServiceConnection
+    @ServiceConnection(name = "kafka")
     KafkaContainer kafkaContainer() {
         logger.info("Creating Kafka Broker");
-        var imageName = DockerImageName.parse(kafkaVersion).asCompatibleSubstituteFor("confluentinc/cp-kafka");
+        var imageName = DockerImageName.parse(kafkaVersion);//.asCompatibleSubstituteFor("confluentinc/cp-kafka");
         return new KafkaContainer(imageName).withLogConsumer(logConsumer);
     }
 
